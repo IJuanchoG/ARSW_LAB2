@@ -35,6 +35,11 @@ public class Consumer extends Thread{
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                try {
+                Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
