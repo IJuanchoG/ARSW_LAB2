@@ -1,8 +1,10 @@
 # Laboratorio 2 ARSW
 ## Integrantes:
-- Juliana Duque
+
 - Juan Garcia
-- Sara Vieda
+- Johan Arias
+- Andrés Marcelo
+- Simón Marin
 
 # Como ejecutar el programa?(Parte I Start Production)
 Primero que todo asegurese de tener Maven instalado en su equipo y tenerlo en el path de su S.O
