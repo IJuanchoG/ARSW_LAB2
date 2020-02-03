@@ -21,13 +21,13 @@ Abra la consola y situese en donde descargo el programa, deberia quedarle algo a
 Check the operation of the program and run it. While this occurs, run jVisualVM and check the CPU consumption of the corresponding process. Why is this consumption? Which is the responsible class? 
 > El problema nace del loop en el cual Consumer se mantiene preguntando si hay elementos en la queue.
 
-![código](images/sinModificar.PNG)
-![Uso de Core](images/sinModificar2.PNG)
+![código](https://github.com/IJuanchoG/ARSW_LAB2/tree/master/images/sinModificar.PNG)
+![Uso de Core](https://github.com/IJuanchoG/ARSW_LAB2/tree/master/images/sinModificar2.PNG)
 
 Modificamos el código agregando sus respectivos Wait/Notify y sincronizamos lo necesario.
 
-![código M](images/Modificado.PNG)
-![Uso de Core M](images/Modificado2.PNG)
+![código M](https://github.com/IJuanchoG/ARSW_LAB2/tree/master/images/Modificado.PNG)
+![Uso de Core M](https://github.com/IJuanchoG/ARSW_LAB2/tree/master/images/Modificado2.PNG)
 
 ## Part II - Synchronization and Dead-Locks.
 
