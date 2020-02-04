@@ -22,7 +22,7 @@ Check the operation of the program and run it. While this occurs, run jVisualVM 
 > El problema nace del loop en el cual Consumer se mantiene preguntando si hay elementos en la queue.
 
 ![código](https://github.com/IJuanchoG/ARSW_LAB2/blob/master/images/SinModificar.png)
-![Uso de Core](https://github.com/IJuanchoG/ARSW_LAB2/tree/master/images/sinModificar2.png)
+![Uso de Core](https://github.com/IJuanchoG/ARSW_LAB2/blob/master/images/SinModificar2.png)
 
 Modificamos el código agregando sus respectivos Wait/Notify y sincronizamos lo necesario.
 
