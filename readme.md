@@ -26,8 +26,8 @@ Check the operation of the program and run it. While this occurs, run jVisualVM 
 
 Modificamos el código agregando sus respectivos Wait/Notify y sincronizamos lo necesario.
 
-![código M](https://github.com/IJuanchoG/ARSW_LAB2/tree/master/images/Modificado.png)
-![Uso de Core M](https://github.com/IJuanchoG/ARSW_LAB2/tree/master/images/Modificado2.png)
+![código M](https://github.com/IJuanchoG/ARSW_LAB2/blob/master/images/Modificado.png)
+![Uso de Core M](https://github.com/IJuanchoG/ARSW_LAB2/blob/master/images/Modificado2.png)
 
 ## Part II - Synchronization and Dead-Locks.
 
