@@ -80,7 +80,8 @@ public class ControlFrame extends JFrame {
                         im.start();
                     }
                 }
-
+                
+                
                 btnStart.setEnabled(false);
 
             }
@@ -133,6 +134,22 @@ public class ControlFrame extends JFrame {
         numOfImmortals.setColumns(10);
 
         JButton btnStop = new JButton("STOP");
+        btnStop.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {                
+                for (Immortal im : immortals) {                  
+                    im.esperar(true);
+                }
+                output = new JTextArea();
+                output.setEditable(false);
+                scrollPane.setViewportView(output);
+                btnStart.setEnabled(true);
+                contentPane.remove(statisticsLabel);
+                statisticsLabel = new JLabel("Immortals total health:");
+                contentPane.add(statisticsLabel, BorderLayout.SOUTH);
+                
+
+            }
+        });
         btnStop.setForeground(Color.RED);
         toolBar.add(btnStop);
 

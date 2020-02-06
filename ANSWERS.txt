@@ -1,0 +1,17 @@
+1. Analyzing the simulation operation scheme, could this create a race condition? 
+
+Si, esto debido a que un inmortal puede tener una lucha con un jugador muerto antes de
+que cambie a dicho estado, esto permitiría que el jugador ya muerto pudiese obtener puntos
+de vida extra, lo que lo volvería a "reanimar".
+
+2.Review the code and identify how the functionality indicated above was implemented. Given the intention of the game, an invariant should be that the sum of the life points of all players is always the same (of course, in an instant of time in which a time increase / reduction operation is not in process ). For this case, for N players, what should this value be?
+
+el invariante de la vida que deberían tener los jugadores es N*100
+
+3. Run the application and verify how the ‘pause and check’ option works. Is the invariant fulfilled?
+
+Debido a la falta de sincronización en los valores no hay un control en el invariante lo que provoca que no se cumpla.
+
+4.Check the operation again (click the button many times). Is the invariant fulfilled or not ?.
+
+Ya no falla de tal manera como el caso anterior
