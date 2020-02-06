@@ -20,6 +20,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JScrollBar;
 
 public class ControlFrame extends JFrame {
@@ -30,7 +32,7 @@ public class ControlFrame extends JFrame {
     private JPanel contentPane;
 
     private List<Immortal> immortals;
-
+    private static Object sincronizador = new Object();;
     private JTextArea output;
     private JLabel statisticsLabel;
     private JScrollPane scrollPane;
@@ -56,6 +58,7 @@ public class ControlFrame extends JFrame {
      * Create the frame.
      */
     public ControlFrame() {
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 647, 248);
         contentPane = new JPanel();
@@ -87,13 +90,14 @@ public class ControlFrame extends JFrame {
         JButton btnPauseAndCheck = new JButton("Pause and check");
         btnPauseAndCheck.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+               
                 /*
 				 * COMPLETAR
                  */
                 int sum = 0;
                 for (Immortal im : immortals) {
-                    sum += im.getHealth();
+                    sum += im.getHealth();                    
+                    im.esperar(true);
                 }
 
                 statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
@@ -111,6 +115,9 @@ public class ControlFrame extends JFrame {
                 /**
                  * IMPLEMENTAR
                  */
+                synchronized (sincronizador){                    
+                    sincronizador.notifyAll();
+                }
 
             }
         });
@@ -139,7 +146,16 @@ public class ControlFrame extends JFrame {
         
         statisticsLabel = new JLabel("Immortals total health:");
         contentPane.add(statisticsLabel, BorderLayout.SOUTH);
+        
 
+    }
+
+    public static Object getSincronizador() {
+        return sincronizador;
+    }
+
+    public static void setSincronizador(Object sincronizador) {
+        ControlFrame.sincronizador = sincronizador;
     }
 
     public List<Immortal> setupInmortals() {

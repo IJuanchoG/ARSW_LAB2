@@ -2,13 +2,14 @@ package edu.eci.arsw.highlandersim;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Semaphore;
 
 public class Immortal extends Thread {
 
     private ImmortalUpdateReportCallback updateCallback=null;
     
     private int health;
+    
+    private boolean estado, vivo;
     
     private int defaultDamageValue;
 
@@ -18,8 +19,9 @@ public class Immortal extends Thread {
 
     private final Random r = new Random(System.currentTimeMillis());
     
-     private Semaphore mutex;
-
+    private static Object sincronizador = ControlFrame.getSincronizador();
+    
+    private static Object desempatar = new Object();
     public Immortal(String name, List<Immortal> immortalsPopulation, int health, int defaultDamageValue, ImmortalUpdateReportCallback ucb) {
         super(name);
         this.updateCallback=ucb;
@@ -27,12 +29,13 @@ public class Immortal extends Thread {
         this.immortalsPopulation = immortalsPopulation;
         this.health = health;
         this.defaultDamageValue=defaultDamageValue;
-        this.mutex = new Semaphore(immortalsPopulation.size()-1);
+        this.estado = false;
+        this.vivo = true;
     }
 
     public void run() {
 
-        while (true) {
+        while (this.estaVivo()) {
             Immortal im;
 
             int myIndex = immortalsPopulation.indexOf(this);
@@ -45,11 +48,18 @@ public class Immortal extends Thread {
             }
 
             im = immortalsPopulation.get(nextFighterIndex);
-            if(im.isAlive()){
-                this.fight(im);
-            }
+            
+                this.sincronicePelea(im);
+            
             
             try {
+                if(estado){
+                    synchronized (sincronizador){
+                        sincronizador.wait();
+                        
+                        esperar(false);    
+                    }
+                }
                 Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -60,23 +70,43 @@ public class Immortal extends Thread {
     }
 
     public void fight(Immortal i2) { 
-        try {
-            mutex.acquire();
-            if (i2.getHealth() > 0) {            
-                i2.changeHealth(i2.getHealth() - defaultDamageValue);
-                this.changeHealth(this.getHealth() + defaultDamageValue);
-                updateCallback.processReport("Fight: " + this + " vs " + i2+"\n");
+        if (i2.getHealth() > 0) {            
+            i2.changeHealth(i2.getHealth() - defaultDamageValue);
+            this.changeHealth(this.getHealth() + defaultDamageValue);
+            updateCallback.processReport("Fight: " + this + " vs " + i2+"\n");
 
-            } else {
-                updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
-            }
-
-        } catch (InterruptedException e) {
-            // exception handling code
-        } finally {
-            mutex.release();
+        } else {
+            updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
+            i2.matar();
+            immortalsPopulation.remove(i2);
         }
-        
+
+    }
+    public void sincronicePelea(Immortal i2){        
+        int thisHash = System.identityHashCode(this);
+        int i2Hash = System.identityHashCode(i2);
+        if (thisHash < i2Hash) {
+            synchronized (this) {
+                synchronized (i2) {
+                    this.fight(i2);
+                }
+            }
+        } else if (thisHash > i2Hash) {
+            synchronized (i2) {
+                synchronized (this) {
+                    this.fight(i2);
+                }
+            }
+        } else {
+            synchronized (desempatar) {
+                synchronized (this) {
+                    synchronized (i2) {
+                        this.fight(i2);
+                    }
+                }
+            }
+        }
+    
     }
 
     public void changeHealth(int v) {
@@ -92,5 +122,14 @@ public class Immortal extends Thread {
 
         return name + "[" + health + "]";
     }
-
+    public void esperar(boolean estado){
+        this.estado = estado;
+    }
+    public boolean estaVivo(){
+        return this.vivo;
+    }
+    private void matar(){
+        this.vivo = false;
+        
+    }
 }
